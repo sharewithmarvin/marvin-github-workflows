@@ -57,6 +57,7 @@ jobs:
 
   DEPLOY_DEV: 
     needs: BUILD
+    when: manual
     runs-on: ubuntu-latest
     environment: development
     steps:
