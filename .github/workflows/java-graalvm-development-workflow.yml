@@ -49,7 +49,7 @@ jobs:
           retention-days: 1
 
   DEVELOPMENT_DEPLOY: 
-    need: BUILD
+    needs: BUILD
     runs-on: ubuntu-latest
     environment: development
     steps:
