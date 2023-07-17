@@ -1,0 +1,46 @@
+name: java-graalvm-resusable-workflow
+
+on:
+  workflow_call:
+    inputs:
+      functionName:
+        required: true
+        type: string
+
+jobs:
+  build:
+    environment: development
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: "☕️ Set up JDK 11 for x64"
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+          architecture: x64
+      - name: "☕️ Setup GraalVM CE"
+        uses: graalvm/setup-graalvm@v1
+        with:
+          version: 'latest'
+          java-version: '11'
+          components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: "✅ Verify versions"
+        run: |
+          echo "GRAALVM_HOME: $GRAALVM_HOME"
+          echo "JAVA_HOME: $JAVA_HOME"
+          java --version
+          gu --version
+          native-image --version
+      - name: "📸 Build the Native Binary"
+        run: |
+          mvn package -Dpackaging=docker-native -Dexec.mainClass=io.micronaut.function.aws.runtime.MicronautLambdaRuntime -Dmicronaut.runtime=lambda -Pgraalvm -DskipTests
+      - name:  "Deploy the Native Binary to AWS Development"
+        uses: appleboy/lambda-action@v0.1.9
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: ${{ secrets.AWS_REGION }}
+          function_name: ${{inputs.functionName}}
+          zip_file: target/function.zip
