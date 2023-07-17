@@ -2,10 +2,6 @@ name: java-graalvm-pull-request
 
 on:
   workflow_call:
-    inputs:
-      functionName:
-        required: true
-        type: string
 
 jobs:
   TEST:
