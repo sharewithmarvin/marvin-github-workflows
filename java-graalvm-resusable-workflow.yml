@@ -1,4 +1,4 @@
-name: java-graalvm-resusable-workflow
+name: java-graalvm-development-workflow
 
 on:
   workflow_call:
@@ -8,7 +8,7 @@ on:
         type: string
 
 jobs:
-  build:
+  BUILD:
     environment: development
     runs-on: ubuntu-latest
     steps:
@@ -33,9 +33,32 @@ jobs:
           java --version
           gu --version
           native-image --version
+      - name: Cache local Maven repository
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
       - name: "📸 Build the Native Binary"
         run: |
           mvn package -Dpackaging=docker-native -Dexec.mainClass=io.micronaut.function.aws.runtime.MicronautLambdaRuntime -Dmicronaut.runtime=lambda -Pgraalvm -DskipTests
+      - name: Archive Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{inputs.functionName}}
+          path: target/
+          retention-days: 1
+
+  DEVELOPMENT_DEPLOY: 
+    need: BUILD
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: ${{inputs.functionName}}
+          path: target/
       - name:  "Deploy the Native Binary to AWS Development"
         uses: appleboy/lambda-action@v0.1.9
         with:
