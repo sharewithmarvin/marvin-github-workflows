@@ -55,22 +55,23 @@ jobs:
           path: target/
           retention-days: 1
 
-  DEPLOY_DEV: 
-    needs: BUILD
-    runs-on: ubuntu-latest
-    environment: development
-    steps:
-      - uses: actions/checkout@v3
-      - name: Download Artifact
-        uses: actions/download-artifact@master
-        with:
-          name: ${{inputs.functionName}}
-          path: target/
-      - name:  "Deploy the Native Binary to AWS Development"
-        uses: appleboy/lambda-action@v0.1.9
-        with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_region: ${{ secrets.AWS_REGION }}
-          function_name: ${{inputs.functionName}}
-          zip_file: target/function.zip
+# ToDo - The github builds results in CORS issue, hence disabling the auto deployment.
+  # DEPLOY_DEV: 
+  #   needs: BUILD
+  #   runs-on: ubuntu-latest
+  #   environment: development
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Download Artifact
+  #       uses: actions/download-artifact@master
+  #       with:
+  #         name: ${{inputs.functionName}}
+  #         path: target/
+  #     - name:  "Deploy the Native Binary to AWS Development"
+  #       uses: appleboy/lambda-action@v0.1.9
+  #       with:
+  #         aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws_region: ${{ secrets.AWS_REGION }}
+  #         function_name: ${{inputs.functionName}}
+  #         zip_file: target/function.zip
