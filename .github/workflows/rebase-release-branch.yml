@@ -15,5 +15,5 @@ jobs:
       - name: Rebase release branches from development
         uses: parkhub/github-action-release-rebase@main
         with:
-          base_ref: release
-          head_branches: development
+          base_ref: development
+          head_branches: release
