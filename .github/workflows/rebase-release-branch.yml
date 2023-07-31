@@ -1,0 +1,19 @@
+name: java-graalvm-pull-request
+
+on:
+  workflow_call:
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  rebase_branches:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out action code
+        uses: actions/checkout@v2
+      - name: Rebase release branches from development
+        uses: parkhub/github-action-release-rebase@main
+        with:
+          base_ref: release
+          head_branches: development
