@@ -1,4 +1,4 @@
-name: java-graalvm-pull-request
+name: rebase-release-branch
 
 on:
   workflow_call:
