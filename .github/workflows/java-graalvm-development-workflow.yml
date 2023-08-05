@@ -41,9 +41,10 @@ jobs:
       - name: "📸 Build the Native Binary"
         run: |
           mvn package -Dpackaging=docker-native -Dexec.mainClass=io.micronaut.function.aws.runtime.MicronautLambdaRuntime -Dmicronaut.runtime=lambda -Pgraalvm -DskipTests
-      - name: Archive Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{inputs.functionName}}
-          path: target/
-          retention-days: 1
+      # STOP ARCHIVING ARTIFACTS GIVEN THIS IS NOT BEING USED FOR DEPLOYMENT    
+      # - name: Archive Artifact
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: ${{inputs.functionName}}
+      #    path: target/
+      #    retention-days: 1
