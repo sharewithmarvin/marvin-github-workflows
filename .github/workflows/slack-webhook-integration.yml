@@ -1,0 +1,17 @@
+name: slack-webhook-integration
+
+on:
+  workflow_call:
+
+env:
+  GITHUB_TOKEN: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+jobs:
+  notify_slack:
+   runs-on: ubuntu-latest
+   steps:
+      - uses: craftech-io/slack-action@v1
+        with:
+          slack_webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          slack_username: Github
+        if: always()
