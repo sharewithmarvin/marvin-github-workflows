@@ -27,8 +27,8 @@ jobs:
                 <servers>
                     <server>
                         <id>core</id>
-                        <username>prashant-gupta-kune</username>
-                        <password>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</password>
+                        <username>${{ secrets.MARVIN_M2_REPOS_NAME }}</username>
+                        <password>${{ secrets.MARVIN_M2_REPOS_PASSWORD }}</password>
                     </server>
                 </servers>
                 <profiles>
