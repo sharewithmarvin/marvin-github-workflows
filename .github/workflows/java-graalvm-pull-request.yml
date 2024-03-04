@@ -54,6 +54,7 @@ jobs:
                     <activeProfile>github</activeProfile>
                 </activeProfiles>
             </settings>' > $HOME/.m2/settings.xml
+          mv $HOME/.m2/settings.xml $GITHUB_WORKSPACE/settings.xml
 
       - name: Build & Verify Unit Test ✅
         run: mvn --batch-mode --update-snapshots package --settings $HOME/.m2/settings.xml
