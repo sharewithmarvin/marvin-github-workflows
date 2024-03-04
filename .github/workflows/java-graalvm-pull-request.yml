@@ -17,44 +17,5 @@ jobs:
           distribution: 'adopt'
           architecture: x64
 
-      - name: Configure settings.xml for Maven 📸
-        run: |
-          echo '<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
-                                  http://maven.apache.org/xsd/settings-1.0.0.xsd">
-                <localRepository>${user.home}/.m2/repository</localRepository>
-                <interactiveMode>true</interactiveMode>
-                <offline>false</offline>
-                <pluginGroups>
-                </pluginGroups>
-                <servers>
-                    <server>
-                        <id>core</id>
-                        <username>${{ secrets.MARVIN_M2_REPOS_NAME }}</username>
-                        <password>${{ secrets.MARVIN_M2_REPOS_PASSWORD }}</password>
-                    </server>
-                </servers>
-                <profiles>
-                    <profile>
-                        <id>github</id>
-                        <repositories>
-                            <repository>
-                                <id>central</id>
-                                <url>https://repo.maven.apache.org/maven2</url>
-                            </repository>
-                                    <repository>
-                                <id>core</id> <!-- The ID should match the server ID above -->
-                                <url>https://maven.pkg.github.com/sharewithmarvin/marvin-core</url>
-                            </repository>
-                        </repositories>
-                    </profile>
-                </profiles>
-                <activeProfiles>
-                    <activeProfile>github</activeProfile>
-                </activeProfiles>
-            </settings>' > $HOME/.m2/settings.xml
-          mv $HOME/.m2/settings.xml $GITHUB_WORKSPACE/settings.xml
-
       - name: Build & Verify Unit Test ✅
-        run: mvn --batch-mode --update-snapshots package --settings $HOME/.m2/settings.xml
+        run: mvn --batch-mode --update-snapshots package
