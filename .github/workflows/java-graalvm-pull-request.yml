@@ -17,5 +17,10 @@ jobs:
           distribution: 'adopt'
           architecture: x64
 
+      - name: 'Create settings.xml'
+        uses: whelk-io/maven-settings-xml-action@v4
+        with:
+            servers: '[{"id": "core", "username": "${{ secrets.MARVIN_M2_REPOS_NAME }}", "password": "${{ secrets.MARVIN_M2_REPOS_PASSWORD }}"}]'
+
       - name: Build & Verify Unit Test ✅
         run: mvn --batch-mode --update-snapshots package
